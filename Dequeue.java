@@ -1,7 +1,7 @@
 public class Dequeue{
-    private class node{
+    public class Node{
         Object value;
-        node next;
+        Node next;
     }
 
     public Dequeue() {
@@ -18,5 +18,10 @@ public class Dequeue{
 
     public static void main(String[] args) {
         System.out.println("Dequeue");
+        Dequeue d = new Dequeue();
+        Node test = d.new Node();
+        test.value = new String("Test");
+
+        System.out.println(test.value);
     }
 }
