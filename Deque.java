@@ -1,4 +1,4 @@
-public class Dequeue{
+public class Deque{
     private class Node{
         Object value;
         Node next;
@@ -8,7 +8,7 @@ public class Dequeue{
     Node scan;
     Node tail;
 
-    public Dequeue() {
+    public Deque() {
         scan = new Node();
         scan.value = "SCAN";
         root = scan;
@@ -22,8 +22,10 @@ public class Dequeue{
         root = newRoot;
     }
 
-    public void pop(){
-
+    public Object pop(){
+        Object val = root.value;
+        root = root.next;
+        return val;
     }
 
     public void enqueue(Object val){
@@ -39,13 +41,15 @@ public class Dequeue{
         }
     }
 
-    public void dequeue(){
+    public Object dequeue(){
+        Object val = tail.value;
 
+        return null;
     }
 
     public static void main(String[] args) {
         System.out.println("Dequeue");
-        Dequeue d = new Dequeue();
+        Deque d = new Deque();
 
         String value1 = "Top of stack";
         String value2 = "Tail";
@@ -56,6 +60,6 @@ public class Dequeue{
         d.enqueue(value2);
         d.enqueue(value3);
 
-        System.out.println("Done");
+        System.out.println(d.pop());
     }
 }
