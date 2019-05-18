@@ -1,7 +1,6 @@
 public class Deque{
     private class Node{
-        Object value;
-        Node prev;
+        Object value;        
         Node next;
     }
 
@@ -29,27 +28,11 @@ public class Deque{
         return val;
     }
 
-    public void enqueue(Object val){
-        if(tail == scan){
-            tail = new Node();
-            tail.value = val;
-            tail.prev = scan;
-            scan.next = tail;
-        } else {
-            Node newNode = new Node();
-            newNode.value = val;
-            newNode.next = scan.next;
-            newNode.prev = scan;
-            newNode.next.prev = newNode;
-            scan.next = newNode;
-        }
-    }
-
-    public Object dequeue(){
-        Object val = tail.value;
-        tail = tail.prev;
-        return val;
-    }
+    public void put(Object val){
+        tail.next = new Node();
+        tail = tail.next;
+        tail.value = val;
+    }    
 
     public static void main(String[] args) {
         System.out.println("Dequeue");
@@ -61,11 +44,12 @@ public class Deque{
 
         d.push(value1);
 
-        d.enqueue(value2);
-        d.enqueue(value3);
+        d.put(value2);
+        d.put(value3);
 
         System.out.println(d.pop());
-        System.out.println(d.dequeue());
-        System.out.println(d.dequeue());
+        System.out.println(d.pop());
+        System.out.println(d.pop());
+        System.out.println(d.pop());
     }
 }
