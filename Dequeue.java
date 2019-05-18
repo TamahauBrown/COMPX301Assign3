@@ -22,8 +22,10 @@ public class Dequeue{
         root = newRoot;
     }
 
-    public void pop(){
-
+    public Object pop(){
+        Object val = root.value;
+        root = root.next;
+        return val;
     }
 
     public void enqueue(Object val){
@@ -39,8 +41,8 @@ public class Dequeue{
         }
     }
 
-    public void dequeue(){
-
+    public Object dequeue(){
+        return null;
     }
 
     public static void main(String[] args) {
@@ -56,6 +58,6 @@ public class Dequeue{
         d.enqueue(value2);
         d.enqueue(value3);
 
-        System.out.println("Done");
+        System.out.println(d.pop());
     }
 }
