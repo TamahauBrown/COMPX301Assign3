@@ -56,23 +56,16 @@ class REcompiler
         //Single or
         if(p[j].equals("|"))
         {
+            System.out.println(p[j]);
             j++;
             Factor();
         }
-        //
-        
-        //Deals with the or case
-        if(p[j].equals("["))
-        {
-            j++;
-            j = orSets(j);
-        }
-        
-        //End of the set or case
         
         //Start of the not included or
         if(p[j].equals("^") && p[j+1].equals("["))
         {
+            System.out.println("HI");
+            System.out.println(p[j] + p[j+1]);
             //Jumping 2 to get the next literal
             j += 2;
             
@@ -84,6 +77,15 @@ class REcompiler
         
         //End of not included or
         
+        //Deals with the or case
+        if(p[j].equals("["))
+        {
+            j++;
+            j = orSets(j);
+        }
+        
+        //End of the set or case
+        
         
         // ? case, got it working with one time 
         //TODO: add 0 times case
@@ -92,7 +94,7 @@ class REcompiler
             //Makes it run one time
             for(int i = 0; i < 1; i++)
             {
-                System.out.println("? " + p[j-1]);
+                System.out.println(p[j-1]);
                 j++;
             }
         }
@@ -106,12 +108,11 @@ class REcompiler
 
     public int Factor()
     {
-        System.out.println("Factor " + p[j]);
         num = 0;
-        //TODO: Create isSyntax(String) NEED HELP AS DONT UNDERSTANDs
+        //TODO: Create isSyntax(String) NEED HELP AS DONT UNDERSTAND
         if(isSyntax(p[j]))
         {
-            //TODO: Create set_State()
+            //Use the Deque here???
             set_State(state, p[j], state + 1, state + 1);
             j++;
             num = state;
