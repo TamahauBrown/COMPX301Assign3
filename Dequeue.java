@@ -1,27 +1,46 @@
 public class Dequeue{
-    public class Node{
+    private class Node{
         Object value;
         Node next;
     }
 
+    Node root;
+    Node scan;
+    Node tail;
+
     public Dequeue() {
-        super();
+        scan = new Node();
+        scan.value = "SCAN";
+        root = scan;
+        tail = scan;
     }
 
-    public void push(){
-
+    public void push(Object val){
+        Node newRoot = new Node();
+        newRoot.value = val;
+        newRoot.next = root;
+        root = newRoot;
     }
 
     public void pop(){
 
     }
 
+    public void enqueue(){
+
+    }
+
+    public void dequeue(){
+
+    }
+
     public static void main(String[] args) {
         System.out.println("Dequeue");
         Dequeue d = new Dequeue();
-        Node test = d.new Node();
-        test.value = new String("Test");
 
-        System.out.println(test.value);
+        String value = "Test";
+        d.push(value);
+
+        System.out.println(value);
     }
 }
