@@ -4,6 +4,7 @@ class REcompiler
     String p [];
     int j = 0;
     int state = 0;
+    boolean isBracket = false;
     public static void main(String [] args)
     {
         REcompiler re = new REcompiler();
@@ -106,19 +107,33 @@ class REcompiler
             state++;
             return num;
         }
-        //( Case WORKS
-        if(p[j].equals("("))
+        // ( Case WORKS
+        if(p[j].equals("(") || isBracket == true)
         {
-            j++;
-            //Don't know why I did num = Expression();
-            if(p[j].equals(")"))
+            // * ASSUMPTION *
+            //If the user adds another paranthesis inside the paranthesis it closes it with an automatic closing bracket 
+            if(p[j].equals("(") && isBracket == true)
             {
-                j++;
+                System.out.println("Close bracket");
+                isBracket = false;
             }
-            else
+            
+            //If the last character was not a ( then don't make a new expression, instead make continue through the factors adding the new items until you reach the )
+            if(isBracket == false)
             {
+                //Gets the next character
+                j++;
+                
+                isBracket = true;
                 Expression();
             }
+            
+            // ) Case WORKS
+            else if(p[j].equals(")"))
+            {
+                System.out.println("Close bracket");
+                j++;
+            } 
         }
         
         //Escape character WORKS
