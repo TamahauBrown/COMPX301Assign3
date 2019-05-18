@@ -26,8 +26,17 @@ public class Dequeue{
 
     }
 
-    public void enqueue(){
-
+    public void enqueue(Object val){
+        if(tail == scan){
+            tail = new Node();
+            tail.value = val;
+            scan.next = tail;
+        } else {
+            Node newNode = new Node();
+            newNode.value = val;
+            newNode.next = scan.next;
+            scan.next = newNode;
+        }
     }
 
     public void dequeue(){
@@ -38,9 +47,15 @@ public class Dequeue{
         System.out.println("Dequeue");
         Dequeue d = new Dequeue();
 
-        String value = "Test";
-        d.push(value);
+        String value1 = "Top of stack";
+        String value2 = "Tail";
+        String value3 = "In queue";
 
-        System.out.println(value);
+        d.push(value1);
+
+        d.enqueue(value2);
+        d.enqueue(value3);
+
+        System.out.println("Done");
     }
 }
