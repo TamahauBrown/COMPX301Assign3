@@ -6,11 +6,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Dequeue",
+            "name": "CodeLens (Launch) - Deque",
             "request": "launch",
-            "mainClass": "Dequeue",
+            "mainClass": "Deque",
             "projectName": "COMPX301Assign3_9f5acd65"
-        },
+        },        
         {
             "type": "java",
             "name": "Debug (Launch) - Current File",
