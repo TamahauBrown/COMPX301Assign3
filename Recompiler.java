@@ -42,12 +42,10 @@ class REcompiler
     public void Term()
     {
         //System.out.println(num);
-        //All terms have a factor
         if(num == -1)
         {
             return;
         }
-        num = Factor();
         //Closure
         if(p[j].equals("*"))
         {
@@ -67,7 +65,7 @@ class REcompiler
         if(p[j].equals("["))
         {
             j++;
-            orSets(j);
+            j = orSets(j);
         }
         
         //End of the set or case
@@ -86,9 +84,22 @@ class REcompiler
         
         //End of not included or
         
-        if(p[j] == "?")
+        
+        // ? case, got it working with one time 
+        //TODO: add 0 times case
+        if(p[j].equals("?"))
         {
-            //Make it run similar to closure.
+            //Makes it run one time
+            for(int i = 0; i < 1; i++)
+            {
+                System.out.println("? " + p[j-1]);
+                j++;
+            }
+        }
+        else
+        {
+            //All terms have a factor
+            num = Factor();
         }
         return;
     }
@@ -96,8 +107,8 @@ class REcompiler
     public int Factor()
     {
         System.out.println("Factor " + p[j]);
-        int num = 0;
-        //TODO: Create isSyntax(byte)
+        num = 0;
+        //TODO: Create isSyntax(String) NEED HELP AS DONT UNDERSTANDs
         if(isSyntax(p[j]))
         {
             //TODO: Create set_State()
@@ -153,19 +164,23 @@ class REcompiler
     
     public int orSets(int count)
     {
-            count++;
+        int x = 0;
+        String str = "";
             while(true)
             {
                 //Counts for the case that the first character ] can be an object literal
-                if(!(p[count].equals("]")) || count != 0)
+                if(!(p[count].equals("]")) || x == 0)
                 {
                     //Get next character
-                    String str = p[count+1];
+                    str = str + p[count];
                     count++;
+                    x++;
                 }
                 //If it is the end of the brackets, close it.
                 else
                 {
+                    System.out.println(str);
+                    count++;
                     break;
                 }
             }
