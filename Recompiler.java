@@ -8,6 +8,8 @@ class REcompiler
     public static void main(String [] args)
     {
         REcompiler re = new REcompiler();
+        
+        //Gets regexp pattern as an arg
         String regexp = args[0];
         re.p = new String[regexp.length()];
         for(int i = 0; i < regexp.length(); i++)
@@ -53,14 +55,16 @@ class REcompiler
             return;
         }
         
-        //Single or
-        if(p[j].equals("|"))
+        //Checks to see if the next character is an or
+        if(p[j+1].equals("|"))
         {
-            System.out.println(p[j]);
-            j++;
+            System.out.println(p[j] + p[j+1] + p[j+2]);
+            j+=3;
             Factor();
         }
         
+        ///////////////////////////////////////////////////
+        //WORKS
         //Start of the not included or
         if(p[j].equals("^") && p[j+1].equals("["))
         {
@@ -70,13 +74,14 @@ class REcompiler
             j += 2;
             
             //Runs the or case to get all the literals
-            orSets(j);
+            j = orSets(j);
             
             //TODO: Make it do something with that case
         }
         
         //End of not included or
         
+        //WORKS
         //Deals with the or case
         if(p[j].equals("["))
         {
@@ -86,7 +91,7 @@ class REcompiler
         
         //End of the set or case
         
-        
+        ////////////////////////////////////////////////////////
         // ? case, got it working with one time 
         //TODO: add 0 times case
         if(p[j].equals("?"))
@@ -112,7 +117,7 @@ class REcompiler
         //TODO: Create isSyntax(String) NEED HELP AS DONT UNDERSTAND
         if(isSyntax(p[j]))
         {
-            //Use the Deque here???
+            //If it is []
             set_State(state, p[j], state + 1, state + 1);
             j++;
             num = state;
@@ -122,6 +127,7 @@ class REcompiler
         // ( Case WORKS
         if(p[j].equals("(") || isBracket == true)
         {
+            /*
             // * ASSUMPTION *
             //If the user adds another paranthesis inside the paranthesis it closes it with an automatic closing bracket 
             if(p[j].equals("(") && isBracket == true)
@@ -129,7 +135,7 @@ class REcompiler
                 System.out.println("Close bracket");
                 isBracket = false;
             }
-            
+            */
             //If the last character was not a ( then don't make a new expression, instead make continue through the factors adding the new items until you reach the )
             if(isBracket == false)
             {
@@ -165,15 +171,30 @@ class REcompiler
     
     public int orSets(int count)
     {
+        //Gets the closing bracket position
+        int closeBracket = count;
         int x = 0;
         String str = "";
+        
+        //Checks that it is not the closing bracket of the set or if it is the first character it reads it as a literal
+        while(!p[closeBracket].equals("]") || x == 0)
+        {
+            closeBracket++;
+            x++;
+        }
+        
+        //Resets the counter to allow us to reuse it for the items in the list
+        x = 0;
+        
             while(true)
             {
                 //Counts for the case that the first character ] can be an object literal
                 if(!(p[count].equals("]")) || x == 0)
                 {
                     //Get next character
-                    str = str + p[count];
+                    //p[count]
+                    int next = count + 1;
+                    set_State(count, p[count], next, closeBracket);
                     count++;
                     x++;
                 }
@@ -202,7 +223,8 @@ class REcompiler
     /*****************************************************/
     public void set_State(int state, String s, int firstState, int secondState)
     {
-        
+        //p[j+1] is the next state and if it is or then p[j+2]???
+        System.out.println("Current State " + state + " Character " + s + " Next State 1: " + firstState + " Next State 2: " + secondState);
     }
     
     public boolean isSyntax(String s)
