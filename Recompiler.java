@@ -58,8 +58,62 @@ class REcompiler
         //Checks to see if the next character is an or
         if(p[j+1].equals("|"))
         {
+            int state1 = 0;
+            int state2 = 0;
+            int orState = j+1;
+            boolean setState2 = true;
             System.out.println(p[j] + p[j+1] + p[j+2]);
-            j+=3;
+            
+            //Checks that these have no special symbols, if there is it gets the literal from the spot before
+            if(p[j].equals("*") || p[j].equals("?"))
+            {
+                state1 = j-1;
+            }
+            else
+            {
+                state1 = j;
+            }
+            //Sets the next state to the symbol after the 'or'
+            state2 = j+2;
+            
+            //Checks if there are special cases of or or paranthesis
+            if(p[j+2].equals("(") || p[j+2].equals("[") || p[j+2].equals("^"))
+            {
+                    //Goes to the 2nd character it open that case
+                    j+= 2;
+                    setState2 = false;
+            }
+            //Checks for special cases such as: * or ?
+            else
+            {
+                    if(p[j+3].equals("*") || p[j+3].equals("?"))
+                    {
+                        j+= 4;
+                    }
+                    //If none of those cases exist it goes to the next literal
+                    else
+                    {
+                        //Makes it go to the next thing after the or.
+                        //DOESNT WORK WITH CASES LIKE a*|(ab)
+                        j+=3;   
+                    }
+            }
+            //Checks that the current character isn't a special case, if it is, it ignores it
+            if(!p[state1].equals("*") && !p[state1].equals("?"))
+            {
+                //Sets the state for the literal
+                set_State(state1, p[state1], j, j);
+            }
+            
+            //Sets the state of the or operater
+            set_State(orState, p[orState], state1, state2);
+            
+            if(setState2)
+            {
+                //Sets the state of the next operator
+                set_State(state2, p[state2], j+1, j+1);
+            }
+            //Goes to the factor case? Unsure if this is correct, go back to Expression???????
             Factor();
         }
         
@@ -127,18 +181,10 @@ class REcompiler
         // ( Case WORKS
         if(p[j].equals("(") || isBracket == true)
         {
-            /*
-            // * ASSUMPTION *
-            //If the user adds another paranthesis inside the paranthesis it closes it with an automatic closing bracket 
-            if(p[j].equals("(") && isBracket == true)
-            {
-                System.out.println("Close bracket");
-                isBracket = false;
-            }
-            */
             //If the last character was not a ( then don't make a new expression, instead make continue through the factors adding the new items until you reach the )
             if(isBracket == false)
             {
+                set_State(j, p[j], j+1, j+1);
                 //Gets the next character
                 j++;
                 
@@ -149,7 +195,7 @@ class REcompiler
             // ) Case WORKS
             else if(p[j].equals(")"))
             {
-                System.out.println("Close bracket");
+                set_State(j, p[j], j+1, j+1);
                 j++;
             } 
         }
@@ -164,6 +210,7 @@ class REcompiler
         else
         {
             System.out.println("LITERAL " + p[j]);
+            set_State(j, p[j], j+1, j+1);
         }
         j++;
         return num;
@@ -192,7 +239,6 @@ class REcompiler
                 if(!(p[count].equals("]")) || x == 0)
                 {
                     //Get next character
-                    //p[count]
                     int next = count + 1;
                     set_State(count, p[count], next, closeBracket);
                     count++;
