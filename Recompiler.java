@@ -48,9 +48,12 @@ class REcompiler
         {
             return;
         }
+        
+        // WORKS
         //Closure
         if(p[j].equals("*"))
         {
+            set_State(j, p[j], j-1, j-1);
             j++;
             return;
         }
@@ -122,8 +125,8 @@ class REcompiler
         //Start of the not included or
         if(p[j].equals("^") && p[j+1].equals("["))
         {
-            System.out.println("HI");
-            System.out.println(p[j] + p[j+1]);
+            set_State(j, p[j], j+1, j+1);
+            //System.out.println(p[j] + p[j+1]);
             //Jumping 2 to get the next literal
             j += 2;
             
@@ -145,30 +148,29 @@ class REcompiler
         
         //End of the set or case
         
-        ////////////////////////////////////////////////////////
-        // ? case, got it working with one time 
-        //TODO: add 0 times case
+        // WORKS
+        // ? Case
         if(p[j].equals("?"))
         {
-            //Makes it run one time
-            for(int i = 0; i < 1; i++)
-            {
-                System.out.println(p[j-1]);
-                j++;
-            }
+            //Sets it to the previous value and makes the next state of the ?
+            set_State(j, p[j], j-1, j-1);
+            j++;
         }
         else
         {
             //All terms have a factor
             num = Factor();
         }
+        
         return;
+        ////////////////////////////////////////////////////////
     }
 
     public int Factor()
     {
         num = 0;
         //TODO: Create isSyntax(String) NEED HELP AS DONT UNDERSTAND
+        /*
         if(isSyntax(p[j]))
         {
             //If it is []
@@ -178,6 +180,8 @@ class REcompiler
             state++;
             return num;
         }
+        */
+        
         // ( Case WORKS
         if(p[j].equals("(") || isBracket == true)
         {
@@ -209,15 +213,27 @@ class REcompiler
         //Literal Case WORKS
         else
         {
-            System.out.println("LITERAL " + p[j]);
-            set_State(j, p[j], j+1, j+1);
+            //If the next value is a special case of a * or a ? it sets the state of the current item to the next value afterwards
+            if(p[j+1].equals("*") || p[j+1].equals("?"))
+            {
+                set_State(j, p[j], j+2, j+2);
+            }
+            //Otherwise proceeds as normal
+            else
+            {
+                set_State(j, p[j], j+1, j+1);
+            }
         }
+        //Goes to the next indexed item
         j++;
         return num;
     }
     
     public int orSets(int count)
     {
+        //Sets the state of the opening bracket
+        set_State(j-1, p[j-1], j, j);
+            
         //Gets the closing bracket position
         int closeBracket = count;
         int x = 0;
@@ -247,7 +263,8 @@ class REcompiler
                 //If it is the end of the brackets, close it.
                 else
                 {
-                    System.out.println(str);
+                    set_State(count, p[count], count+1, count+1);
+                    //System.out.println(str);
                     count++;
                     break;
                 }
@@ -269,8 +286,9 @@ class REcompiler
     /*****************************************************/
     public void set_State(int state, String s, int firstState, int secondState)
     {
-        //p[j+1] is the next state and if it is or then p[j+2]???
-        System.out.println("Current State " + state + " Character " + s + " Next State 1: " + firstState + " Next State 2: " + secondState);
+        //System.out.println("Current State " + state + " Character " + s + " Next State 1: " + firstState + " Next State 2: " + secondState);
+     
+        System.out.println(state + " " + s + " " + firstState + " " + secondState);
     }
     
     public boolean isSyntax(String s)
