@@ -29,6 +29,10 @@ class REcompiler
         {
             if(p[j+1].equals("*") || p[j+1].equals("?") || p[j+1].equals("|"))
             {
+                set_State(-1, ".", j+2, j+2);
+            }
+            else
+            {
                 set_State(-1, ".", j+1, j+1);
             }
             firstTime = false;
@@ -48,7 +52,8 @@ class REcompiler
         if(!(p[j].equals("\n")))
            {
             //Covers E --> TE
-             Expression();  
+            //System.out.println(p[j]);
+            Expression();  
            }
         }
         else
@@ -126,6 +131,10 @@ class REcompiler
             num = Factor();
         }
         }
+        else
+        {
+            num = Factor();
+        }
     }
 
 
@@ -143,6 +152,7 @@ class REcompiler
             return num;
         }
         */
+        //System.out.println("FACC");
         if(j < p.length)
         {
         // ( Case WORKS
@@ -153,7 +163,7 @@ class REcompiler
             {
                 set_State(j, p[j], j+1, j+1);
                 //Gets the next character
-                j++;
+                //j++;
                 
                 isBracket = true;
                 Expression();
@@ -163,7 +173,7 @@ class REcompiler
             else if(p[j].equals(")"))
             {
                 set_State(j, p[j], j+1, j+1);
-                j++;
+                //j++;
             } 
         }
         
@@ -186,6 +196,7 @@ class REcompiler
                 //Otherwise proceeds as normal
                 else
                 {
+                    //System.out.println("HEY");
                     set_State(j, p[j], j+1, j+1);
                 }
                 //j++;
@@ -193,12 +204,13 @@ class REcompiler
             //Otherwise proceeds as normal
             else
             {
+//                System.out.println(j);
                 set_State(j, p[j], j+1, j+1);
             }
-            //Goes to the next indexed item
+        }
+        }
+        //Goes to the next indexed item
             j++;
-        }
-        }
         return j;
     }
     
