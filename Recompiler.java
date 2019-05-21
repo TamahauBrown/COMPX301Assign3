@@ -1,5 +1,6 @@
 class REcompiler
 {
+    boolean starStart = false;
     int num = 0;
     String p [];
     int j = 0;
@@ -30,6 +31,7 @@ class REcompiler
             if(p[j+1].equals("*") || p[j+1].equals("?") || p[j+1].equals("|"))
             {
                 set_State(-1, ".", j+2, j+2);
+                starStart = true;
             }
             else
             {
@@ -92,6 +94,7 @@ class REcompiler
         {
             j++;
             j = orSets(j);
+            return;
         }
         
         //End of the set or case
@@ -108,28 +111,32 @@ class REcompiler
         
         if(j+1 < p.length)
         {
-        if(p[j].equals("^") && p[j+1].equals("["))
-        {
-            set_State(j, p[j], j+1, j+1);
-            //System.out.println(p[j] + p[j+1]);
-            //Jumping 2 to get the next literal
-            j += 2;
+            if(p[j].equals("^") && p[j+1].equals("["))
+            {
+                if(starStart)
+                {
+                    j++;
+                }
+                set_State(j, p[j], j+1, j+1);
+                //System.out.println(p[j] + p[j+1]);
+                //Jumping 2 to get the next literal
+                j += 2;
             
-            //Runs the or case to get all the literals
-            j = orSets(j);
+                //Runs the or case to get all the literals
+                j = orSets(j);
             
-            //TODO: Make it do something with that case
-        }
+                //TODO: Make it do something with that case
+            }
         
-        //Checks to see if the next character is an or
-        if(p[j+1].equals("|") || p[j].equals("|"))
-        {
-            orStatement();
-        }
-        else
-        {
-            num = Factor();
-        }
+            //Checks to see if the next character is an or
+            if(p[j+1].equals("|") || p[j].equals("|"))
+            {
+                orStatement();
+            }
+            else
+            {
+                num = Factor();
+            }
         }
         else
         {
@@ -161,9 +168,9 @@ class REcompiler
             //If the last character was not a ( then don't make a new expression, instead make continue through the factors adding the new items until you reach the )
             if(isBracket == false)
             {
-                set_State(j, p[j], j+1, j+1);
+                set_State(j, p[j], j+2, j+2);
                 //Gets the next character
-                //j++;
+                j++;
                 
                 isBracket = true;
                 Expression();
@@ -172,53 +179,69 @@ class REcompiler
             // ) Case WORKS
             else if(p[j].equals(")"))
             {
-                set_State(j, p[j], j+1, j+1);
-                //j++;
+                set_State(j, p[j], j+2, j+2);
+                j++;
             } 
         }
-        
-        //Escape character WORKS
-        if(p[j].equals("\\"))
+        if(j < p.length)
         {
+            //Escape character WORKS
+            if(p[j].equals("\\"))
+            {
                System.out.println("ESCAPE");
                return -1;
-        }
-        //Literal Case WORKS
-        else
-        {
-            if(j+1 < p.length)
-            {
-                //If the next value is a special case of a * or a ? it sets the state of the current item to the next value afterwards
-                if(p[j+1].equals("*") || p[j+1].equals("?"))
-                {
-                    set_State(j, p[j], j+2, j+2);
-                }
-                //Otherwise proceeds as normal
-                else
-                {
-                    //System.out.println("HEY");
-                    set_State(j, p[j], j+1, j+1);
-                }
-                //j++;
             }
-            //Otherwise proceeds as normal
+            //Literal Case WORKS
             else
             {
-//                System.out.println(j);
-                set_State(j, p[j], j+1, j+1);
+                if(j+1 < p.length)
+                {
+                    //If the next value is a special case of a * or a ? it sets the state of the current item to the next value afterwards
+                    if(p[j+1].equals("*") || p[j+1].equals("?"))
+                    {
+                        set_State(j, p[j], j+2, j+2);
+                    }
+                    //Otherwise proceeds as normal
+                    else
+                    {
+                        if(starStart)
+                        {
+                            set_State(j, p[j], j+2, j+2);
+                        }
+                        else
+                        {
+//                          System.out.println(j);
+                            set_State(j, p[j], j+1, j+1);
+                        }
+                    }
+                //j++;
+                }
+                //Otherwise proceeds as normal
+                else if(j < p.length)
+                {
+                    if(starStart)
+                    {
+                        set_State(j, p[j], j+2, j+2);
+                    }
+                    else
+                    {
+//                      System.out.println(j);
+                        set_State(j, p[j], j+1, j+1);
+                    }
+                }
             }
         }
         }
         //Goes to the next indexed item
-            j++;
+        j++;
         return j;
     }
     
     public int orSets(int count)
     {
         //Sets the state of the opening bracket
-        set_State(j-1, p[j-1], j, j);
-            
+        set_State(j-1, p[j-1], j+1, j+1);
+    
         //Gets the closing bracket position
         int closeBracket = count;
         int x = 0;
@@ -233,12 +256,13 @@ class REcompiler
         
         //Resets the counter to allow us to reuse it for the items in the list
         x = 0;
-        
+        closeBracket++;
             while(true)
             {
                 //Counts for the case that the first character ] can be an object literal
                 if(!(p[count].equals("]")) || x == 0)
                 {
+                    //System.out.println(count);
                     //Get next character
                     int next = count + 1;
                     set_State(count, p[count], next, closeBracket);
