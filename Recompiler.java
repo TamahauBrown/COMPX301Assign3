@@ -261,10 +261,15 @@ class REcompiler
             else
             {
                 state1 = j;
+                orState = j+1;
             }
             //Sets the next state to the symbol after the 'or'
             state2 = j+2;
             
+            //INFINITE FUCKING LOOP
+            if(j+2 < p.length)
+            {
+                //System.out.println("HEY " + p[j+1]);
             //Checks if there are special cases of or or paranthesis
             if(p[j+2].equals("(") || p[j+2].equals("[") || p[j+2].equals("^"))
             {
@@ -276,10 +281,13 @@ class REcompiler
             //Checks for special cases such as: * or ?
             else
             {
+                //System.out.println("HERE " + p[j+3]);
                 if(j+3 < p.length)
                 {
+                    
                     if(p[j+3].equals("*") || p[j+3].equals("?"))
                     {
+                        //System.out.println("*");
                         j+= 4;
                     }
                     //If none of those cases exist it goes to the next literal
@@ -292,8 +300,15 @@ class REcompiler
                 }
                 else
                 {
+                    //System.out.println("SKIP");
                     j += 3;
                 }
+            }
+            }
+            else
+            {
+                //System.out.println("SKIPs");
+                j+=2;
             }
             if(state1 - 1 > 0)
             {
@@ -304,14 +319,28 @@ class REcompiler
                     set_State(state1, p[state1], j+1, j+1);
                 }
             }
+            if(p[state1].equals("*"))
+            {
                 //Sets the state of the or operater
                 set_State(orState, p[orState], state1, state2);
-            
+            }
+            else
+            {
+                //Sets the state of the or operater
+                set_State(orState, p[orState], state1, state2);
+            }
         if(setState2 == true)
         {
-            //System.out.println("STATE 2");
+            if(!p[state1].equals("*"))
+            {
+                System.out.println("STATE 2");
                 //Sets the state of the next operator
-                set_State(state2-1, p[state2-1], j, j);
+                set_State(state2, p[state2], j, j);
+            }
+            //else
+            //{
+                //set_State(state2, p[state2-1], j, j);
+            //}
         }
         j--;
             //Goes to the factor case? Unsure if this is correct, go back to Expression???????
