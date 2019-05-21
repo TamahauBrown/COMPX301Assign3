@@ -18,35 +18,33 @@ public class Researcher {
     }
 
     public void addFSMNode(FSMNode node){
-        root = addFSMNode(root, node, 0);
+        root = addFSMNode(root, node);
     }
 
-    private FSMNode addFSMNode(FSMNode currentNode,  FSMNode newNode, int i) {
-        if(currentNode == null){
-            newNode.index = i;
+    private FSMNode addFSMNode(FSMNode currentNode,  FSMNode newNode) {
+        if(currentNode == null){            
             return newNode;
         } 
-        currentNode.next = addFSMNode(currentNode.next, newNode, ++i);
+        currentNode.next = addFSMNode(currentNode.next, newNode);
         return currentNode;
     }
 
-    public static void main(String[] args) {
+    public void readFSM(){
         try {
             Scanner scanner = new Scanner(System.in);
             String input;
-            Researcher r = new Researcher();
+            
             while(scanner.hasNextLine()){
                 input = scanner.nextLine();
                 input = input.trim();
                 String[] fsmLine = input.split(" ", 4);
                 
-                FSMNode newNode = r.new FSMNode();
+                FSMNode newNode = new FSMNode();
                 newNode.ch = fsmLine[1];
                 newNode.nextState1 = Integer.parseInt(fsmLine[2]);
                 newNode.nextState2 = Integer.parseInt(fsmLine[3]);
-                r.addFSMNode(newNode);
-                System.out.println(input);
-                
+                addFSMNode(newNode);
+                System.out.println(input);                
 
             }
 
@@ -57,5 +55,10 @@ public class Researcher {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        Researcher r = new Researcher();
+        r.readFSM();
     }
 }
