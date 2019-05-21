@@ -6,11 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Researcher",
+            "request": "launch",
+            "mainClass": "Researcher",
+            "projectName": "COMPX301Assign3_9f5acd65",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Deque",
             "request": "launch",
             "mainClass": "Deque",
             "projectName": "COMPX301Assign3_9f5acd65"
-        },        
+        },
         {
             "type": "java",
             "name": "Debug (Launch) - Current File",
