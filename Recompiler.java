@@ -35,6 +35,10 @@ class REcompiler
                     set_State(-1, ".", j+2, j+2);
                     starStart = true;
                 }
+                else
+                {
+                    set_State(-1, ".", j+1, j+1);
+                }
             }
             else
             {
@@ -100,7 +104,7 @@ class REcompiler
         if(p[j].equals("?"))
         {
             //Sets it to the previous value and makes the next state of the ?
-            set_State(j, p[j], j-1, j-1);
+            set_State(j, p[j], j, j+2);
             j++;
             return;
         }
@@ -253,7 +257,7 @@ class REcompiler
                 //If it is the end of the brackets, close it.
                 else
                 {
-                    set_State(count, p[count], count+1, count+1);
+                    set_State(count, p[count], count+2, count+2);
                     count++;
                     break;
                 }
