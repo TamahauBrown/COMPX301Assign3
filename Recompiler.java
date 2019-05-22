@@ -382,26 +382,33 @@ class REcompiler
                 }
             }
         //System.out.println(p[state1]);
-            if(p[state1].equals("*"))
+            if(p[state1].equals("*") || p[state1].equals("?"))
             {
-                //System.out.println("OR");
-                //Sets the state of the or operater
-                set_State(orState, p[orState], state1, state2+1);
+                if(p[state2+1].equals("*"))
+                {
+                    //Sets the state of the or operater
+                    set_State(orState-1, "|", state1+1, state2+2);
+                }
+                else
+                {
+                    //Sets the state of the or operater
+                    set_State(orState-1, "|", state1+1, state2+1);
+                }
             }
             else
             {
                 if(state2+1 < p.length)
                 {
-                    if(p[state2+1].equals("*"))
+                    if(p[state2+1].equals("*") || p[state1].equals("?"))
                     {
-                        set_State(orState-1, p[orState-1], state1+1, state2+2);
+                        set_State(orState-1, "|", state1+1, state2+2);
                     }
                 }
                 else
                 {
                     //System.out.println("ORs" + orState);
                     //Sets the state of the or operater
-                    set_State(orState-1, p[orState-1], state1+1, state2+1);
+                    set_State(orState-1, "|", state1+1, state2+1);
                 }
             }
         if(setState2 == true)
