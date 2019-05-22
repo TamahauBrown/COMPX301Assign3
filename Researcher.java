@@ -56,15 +56,17 @@ public class Researcher {
             while (scanner.hasNextLine()) {
                 input = scanner.nextLine();
                 input = input.trim();
-                String[] fsmLine = input.split(" ", 4);
+                if (!input.contains("EXIT")) {                    
+                    String[] fsmLine = input.split(" ", 4);
 
-                FSMNode newNode = new FSMNode();
-                newNode.index = Integer.parseInt(fsmLine[0]);
-                newNode.ch = fsmLine[1];
-                newNode.nextState1 = Integer.parseInt(fsmLine[2]);
-                newNode.nextState2 = Integer.parseInt(fsmLine[3]);
-                addFSMNode(newNode);
-                System.out.println(input);
+                    FSMNode newNode = new FSMNode();
+                    newNode.index = Integer.parseInt(fsmLine[0]);
+                    newNode.ch = fsmLine[1];
+                    newNode.nextState1 = Integer.parseInt(fsmLine[2]);
+                    newNode.nextState2 = Integer.parseInt(fsmLine[3]);
+                    addFSMNode(newNode);
+                    System.out.println(input);
+                }
 
             }
 
@@ -81,21 +83,35 @@ public class Researcher {
         for (int i = 0; i < line.length(); i++) {
             boolean match = false;
             deque.push(get(currentState));
+
             FSMNode state = (FSMNode) deque.pop();
-            if(state == null){
+
+            if (state == null) {
                 System.out.println(line);
                 return;
-            } 
-            //System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
+            }
+            //System.out.println(state.ch);
+            if(state.ch.contains(".")){
+                //System.out.println("here");
+                currentState = state.nextState1;
+                deque.push(get(currentState));
+                state = (FSMNode) deque.pop();
+            }
+            // System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
             if (!isSpecial(state.ch)) {
                 if (state.ch.charAt(0) == line.charAt(i)) {
                     match = true;
-                    //System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
+                    deque.put(get(state.nextState1));
+                    // System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
                 }
+            } else {
+                deque.push(get(state.nextState1));
+                deque.push(get(state.nextState1));
             }
-            if(match){
+
+            if (match) {
                 currentState = state.nextState1;
-                if (i == line.length() - 1 && get(currentState) == null){
+                if (i == line.length() - 1 && get(currentState) == null) {
                     System.out.println(line);
                     return;
                 }
@@ -104,7 +120,6 @@ public class Researcher {
             }
         }
 
-        
     }
 
     private boolean isSpecial(String ch) {
@@ -120,7 +135,7 @@ public class Researcher {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String s;
             while ((s = br.readLine()) != null) {
-                //System.out.println(s);
+                // System.out.println(s);
                 searchLine(s);
             }
         } catch (FileNotFoundException e) {
