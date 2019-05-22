@@ -1,3 +1,10 @@
+/**
+ * Deque
+ * ==========================
+ * Tamahau Brown - 1314934
+ * Troy Dean - 0222566
+ */
+
 public class Deque{
     //Node to represent values in the Deque
     private class Node{

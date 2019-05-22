@@ -1,3 +1,9 @@
+/**
+ * REcompiler
+ * ==========================
+ * Tamahau Brown - 1314934
+ * Troy Dean - 0222566
+ */
 class REcompiler
 {
     boolean starStart = false;

@@ -1,3 +1,9 @@
+/**
+ * REsearcher
+ * ==========================
+ * Tamahau Brown - 1314934
+ * Troy Dean - 0222566
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -5,7 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Researcher {
+public class REsearcher {
     // A node for representing an FSM state
     private class FSMNode {
         int index;
@@ -18,7 +24,7 @@ public class Researcher {
     FSMNode root;
     Deque deque = new Deque();
 
-    public Researcher() {
+    public REsearcher() {
         //Create a root node to build the list of states
         root = new FSMNode();
         root.index = -1;
@@ -172,7 +178,7 @@ public class Researcher {
             System.out.println("Usage: java Researcher <filename>");
             return;
         }
-        Researcher r = new Researcher();
+        REsearcher r = new REsearcher();
         r.readFSM();
         r.searchFile(args[0]);
     }
