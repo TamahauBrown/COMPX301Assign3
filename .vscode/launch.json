@@ -6,11 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "mainClass": "REcompiler",
+            "args": "'a|b'"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Researcher",
             "request": "launch",
             "mainClass": "Researcher",
             "projectName": "COMPX301Assign3_9f5acd65",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "args": "test.txt"
         },
         {
             "type": "java",
