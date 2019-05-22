@@ -1,5 +1,6 @@
 ab
 ba
+cab
 abba
 aab
 aaab
@@ -9,4 +10,3 @@ trap
 trip
 trope
 troop
-cab

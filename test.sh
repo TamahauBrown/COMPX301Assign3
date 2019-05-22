@@ -27,4 +27,4 @@ java REcompiler "a|b*"
 
 echo "======================"
 echo "Running test 7 - 'a*|b*'"
-java REcompiler "a*|b*"
+java REcompiler "(a*|b)*"

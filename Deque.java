@@ -23,6 +23,9 @@ public class Deque{
     }
 
     public Object pop(){
+        if(root.value == "SCAN"){
+            return null;
+        }
         Object val = root.value;
         root = root.next;
         return val;
