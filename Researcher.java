@@ -59,6 +59,7 @@ public class Researcher {
                 String[] fsmLine = input.split(" ", 4);
 
                 FSMNode newNode = new FSMNode();
+                newNode.index = Integer.parseInt(fsmLine[0]);
                 newNode.ch = fsmLine[1];
                 newNode.nextState1 = Integer.parseInt(fsmLine[2]);
                 newNode.nextState2 = Integer.parseInt(fsmLine[3]);
@@ -84,15 +85,22 @@ public class Researcher {
             if(state == null){
                 System.out.println(line);
                 return;
-            }
+            } 
+            //System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
             if (!isSpecial(state.ch)) {
                 if (state.ch.charAt(0) == line.charAt(i)) {
                     match = true;
-                    //System.out.println(state.ch.charAt(0) + ": " + line.charAt(0));
+                    //System.out.println(state.ch.charAt(0) + ": " + line.charAt(i));
                 }
             }
             if(match){
-                currentState++;
+                currentState = state.nextState1;
+                if (i == line.length() - 1 && get(currentState) == null){
+                    System.out.println(line);
+                    return;
+                }
+            } else {
+                currentState = 0;
             }
         }
 
