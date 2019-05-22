@@ -106,6 +106,7 @@ class REcompiler
             //Sets it to the previous value and makes the next state of the ?
             set_State(j, p[j], j-1, j-1);
             j++;
+            return;
         }
         //System.out.println(j);
         
@@ -124,6 +125,7 @@ class REcompiler
             
                 //Runs the or case to get all the literals
                 j = orSets(j);
+                return;
             
                 //TODO: Make it do something with that case
             }
@@ -132,6 +134,7 @@ class REcompiler
             if(p[j+1].equals("|") || p[j].equals("|"))
             {
                 orStatement();
+                return;
             }
             else
             {
@@ -289,18 +292,28 @@ class REcompiler
             boolean setState2 = true;
             //System.out.println(p[j] + p[j+1] + p[j+2]);
             
-            //Checks that these have no special symbols, if there is it gets the literal from the spot before
-            if(p[j].equals("*") || p[j].equals("?"))
+            if(p[j+1].equals("|"))
             {
-                state1 = j-1;
+                j++;
+            }
+            //System.out.println(p[j]);
+            //Checks that these have no special symbols, if there is it gets the literal from the spot before
+            if(j-1 >= 0)
+            {
+                if(p[j-1].equals("*") || p[j-1].equals("?"))
+                {
+                    //System.out.print("XD");
+                    state1 = j-1;
+                }
             }
             else
             {
+                //System.out.println(p[j]);
                 state1 = j;
-                orState = j+1;
             }
+            orState = j+1;
             //Sets the next state to the symbol after the 'or'
-            state2 = j+2;
+            state2 = j+1;
             
             //INFINITE FUCKING LOOP
             if(j+2 < p.length)
@@ -346,33 +359,76 @@ class REcompiler
                 //System.out.println("SKIPs");
                 j+=2;
             }
-            if(state1 - 1 > 0)
+            //System.out.println(p[state1]);
+            if(state1 - 1 >= 0)
             {
+                //System.out
                 //Checks that the current character isn't a special case, if it is, it ignores it
-                if(!p[state1-1].equals("*") && !p[state1-1].equals("?"))
+                if(!p[state1].equals("*") && !p[state1].equals("?"))
                 {
                     //Sets the state for the literal
                     set_State(state1, p[state1], j+1, j+1);
                 }
             }
+            else
+            {
+                if(state1-1 >= 0)
+                {
+                    set_State(state1-1, p[state1-1], j+1, j+1);
+                }
+                else
+                {
+                    set_State(state1, p[state1], j+1, j+1);
+                }
+            }
+        //System.out.println(p[state1]);
             if(p[state1].equals("*"))
             {
+                //System.out.println("OR");
                 //Sets the state of the or operater
-                set_State(orState, p[orState], state1, state2);
+                set_State(orState, p[orState], state1, state2+1);
             }
             else
             {
-                //Sets the state of the or operater
-                set_State(orState, p[orState], state1, state2);
+                if(state2+1 < p.length)
+                {
+                    if(p[state2+1].equals("*"))
+                    {
+                        set_State(orState-1, p[orState-1], state1+1, state2+2);
+                    }
+                }
+                else
+                {
+                    //System.out.println("ORs" + orState);
+                    //Sets the state of the or operater
+                    set_State(orState-1, p[orState-1], state1+1, state2+1);
+                }
             }
         if(setState2 == true)
         {
-            if(!p[state1].equals("*"))
+            //if(p[state1].equals("*"))
+            //{
+                //if(orState + 2 < p.length)
+                //{
+                    //if(p[orState+2].equals("*") || p[orState+2].equals("?"))
+                    //{
+                        //System.out.println("STATE 2");
+                        //Sets the state of the next operator
+                        //set_State(state2, p[state2-1], state2-1, j);
+                    //}
+                //}
+            //}
+            //System.out.println(p[state2]);
+            if(state2 + 1 < p.length)
             {
-                System.out.println("STATE 2");
-                //Sets the state of the next operator
-                set_State(state2, p[state2], j, j);
+                    if(p[state2+1].equals("*") || p[state2+1].equals("?"))
+                    {
+                        //System.out.println("STATE 2");
+                        //Sets the state of the next operator
+                        set_State(state2, p[state2], state2+2, state2+2);
+                    }
             }
+
             //else
             //{
                 //set_State(state2, p[state2-1], j, j);
@@ -380,7 +436,7 @@ class REcompiler
         }
         j--;
             //Goes to the factor case? Unsure if this is correct, go back to Expression???????
-            Factor();
+            return;
     }
 
     public void Parse()
