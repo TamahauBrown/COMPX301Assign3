@@ -28,10 +28,13 @@ class REcompiler
     {
         if(firstTime)
         {
-            if(p[j+1].equals("*") || p[j+1].equals("?") || p[j+1].equals("|"))
+            if(j+1 < p.length)
             {
-                set_State(-1, ".", j+2, j+2);
-                starStart = true;
+                if(p[j+1].equals("*") || p[j+1].equals("?") || p[j+1].equals("|"))
+                {
+                    set_State(-1, ".", j+2, j+2);
+                    starStart = true;
+                }
             }
             else
             {
@@ -190,7 +193,8 @@ class REcompiler
                         }
                         else
                         {
-                            set_State(j, p[j], j+1, j+1);
+                            //System.out.println("HI");
+                            set_State(j, p[j], j+2, j+2);
                         }
                     }
                 }
@@ -203,7 +207,8 @@ class REcompiler
                     }
                     else
                     {
-                        set_State(j, p[j], j+1, j+1);
+                        //System.out.println("HERE" + j);
+                        set_State(j, p[j], j+2, j+2);
                     }
                 }
             }
